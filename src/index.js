@@ -1,60 +1,45 @@
-function zerosCnt(num, type) {
-  if(type == 2 && num % 2 != 0) {
-    return 0;
-  }
-
-  res = 0;
-
-  while(num > 0) {
-    num /= 5;
-    num = parseInt(num);
-    res += num;
-  }
-  
+function lastZeroInNum(num) {
+  num = num.toString();
+  let res = 0;
+  for(let i = num.length - 1; i >= 0 && num[i] == '0'; i--, res++);
   return res;
 }
 
-module.exports = function zeros(expression) {
-  //states
-  let NUMBER = 0;
-  let FACT = 0;
-  
-  let state = NUMBER;
-  let numBuff = '';
-  let factCount = 0;
+function zerosCnt(arr) {
+
   let res = 0;
 
-  for(let i = 0; i < expression.length; i++) {
-    if(state == NUMBER && expression[i] != '*') {
-      if(expression[i] >= '0' && expression[i] <= '9') {
-        numBuff += expression[i];
-      } else {
-        state = FACT;
-        factCount = 1;
-      }
-    } else if(state == FACT) {
-      if(expression[i] == '!') {
-        factCount += 1;
-      } else {
-        if(zerosCnt(parseInt(numBuff), factCount) > 0) {
-          res += zerosCnt(parseInt(numBuff), factCount);
-        } else {
-          //return 0;
-        }
+  let curVal = 1;
+  for(let i = 0; i < arr.length; i++) {
+    curVal *= arr[i];
+    zeroCnt = lastZeroInNum(curVal);
+    curVal = parseInt(curVal / Math.pow(10, zeroCnt));
+    curVal %= 100000000000000;
+    res += zeroCnt;
+  }
+  return res;
+}
 
-        numBuff = '';
-        factCount = 0;
-        state = NUMBER;
-      }
-    }
+function packNumbers(arr, factStr) {
+
+  factStr = factStr.split('');
+
+  fact = parseInt(factStr.filter(number => number >= '0' && number <= '9').join(''));
+  step = factStr.filter(val => val == '!').length;
+
+  for(let num = fact; num >= 1; num -= step) {
+    arr.push(num);
+  }
+}
+
+module.exports = function zeros(expression) {
+  arr = [];
+  splitExpression = expression.split('*');
+
+  for(let i = 0; i < splitExpression.length; i++) {
+    packNumbers(arr, splitExpression[i]);
   }
 
-  
-  console.log(res);
-
-  if(parseInt(numBuff) > 0) {
-    res += zerosCnt(parseInt(numBuff), factCount);
-  }
-
+  let res = zerosCnt(arr);
   return res;
 }
