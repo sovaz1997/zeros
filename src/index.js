@@ -9,15 +9,13 @@ function zerosCnt(arr) {
 
   let res = 0;
 
-  let curVal = 1;
+  let curVal = BigInt(1);
+
   for(let i = 0; i < arr.length; i++) {
-    curVal *= arr[i];
-    zeroCnt = lastZeroInNum(curVal);
-    curVal = parseInt(curVal / Math.pow(10, zeroCnt));
-    curVal %= 100000000000000;
-    res += zeroCnt;
+    curVal *= BigInt(arr[i]);
   }
-  return res;
+
+  return lastZeroInNum(curVal);
 }
 
 function packNumbers(arr, factStr) {
