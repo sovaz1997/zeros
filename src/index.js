@@ -6,9 +6,6 @@ function lastZeroInNum(num) {
 }
 
 function zerosCnt(arr) {
-
-  let res = 0;
-
   let curVal = BigInt(1);
 
   for(let i = 0; i < arr.length; i++) {
